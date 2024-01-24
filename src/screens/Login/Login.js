@@ -8,7 +8,7 @@ import { Theme_Color, Theme_Color1 } from '../../utils/Color'
 import { Base_Url } from '../../utils/String'
 import jestConfig from '../../../jest.config'
 import Loader from '../../components/Loader'
-
+g
 const Login = ({navigation}) => {
   const[mail,setMail]=useState('rohit123@gmail.com')
   const[badMail,setBadMail]=useState('')
