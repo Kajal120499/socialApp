@@ -1,4 +1,4 @@
-export const Theme_Color='#FF9BD2'
+export const Theme_Color='#40A2D8'
 export const white='#fff'
 export const black="#000"
-export const Theme_Color1="#D63484"
+export const Theme_Color1="#0B60B0"

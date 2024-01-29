@@ -5,17 +5,34 @@ import { Images } from '../../utils/Images'
 import CustomTextInput from '../../components/CustomTextInput'
 import LinearGradient from 'react-native-linear-gradient'
 import { Theme_Color, Theme_Color1 } from '../../utils/Color'
-import { Base_Url } from '../../utils/String'
-import jestConfig from '../../../jest.config'
+import { Base_Url, login_url } from '../../utils/String'
 import Loader from '../../components/Loader'
-g
+import { postApiRequest } from '../../api/ApiRequest'
+import { useDispatch } from 'react-redux'
+import { setAuthData } from '../../redux/Authslice'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 const Login = ({navigation}) => {
-  const[mail,setMail]=useState('rohit123@gmail.com')
+  const dispatch=useDispatch()
+  const[mail,setMail]=useState('chirag12@gmail.com')
   const[badMail,setBadMail]=useState('')
-  const[pass,setPass]=useState('123456')
+  const[pass,setPass]=useState('12346')
   const[badPass,setBadPass]=useState('')
 
   const[loading,setLoading]=useState(false)
+
+  const [loginResultDict, setLoginResultDict] = useState({})
+
+  const saveId = async () => {
+    try {
+        var loginData = JSON.stringify(loginResultDict)
+        console.warn("AsyncStorage Login Saved" + loginData)
+        await AsyncStorage.setItem('LoginData', loginData);
+         navigation.navigate("Dashboard")
+    } catch (e) {
+        console.warn(e)
+    }
+}
 
 
   const validate=()=>{
@@ -40,18 +57,16 @@ const Login = ({navigation}) => {
     if(pass==''){
       setBadPass("Please Enter Password")
       isValid=false
-    }else if(pass!='' && pass.length<6)
+    }else if(pass!='' && pass.length<4)
     {
       setBadPass("Please Enter Valid Pass is minimum 6")
       isValid=false
-    }else if(pass!='' && pass.length>6)
+    }else if(pass!='' && pass.length>4)
     {
       setBadPass("")
       isValid=true
-      // loginApiCall()
-      Alert.alert("hello")
     }
-
+    return isValid
   }
 
   const loginApiCall=async()=>{
@@ -62,22 +77,29 @@ const Login = ({navigation}) => {
     //  })
     // console.log(data)
     // console.warn(mail+" "+pass)
-    const myHeaders= new Headers()
-    myHeaders.append("content-type","application/json")
-      await fetch(Base_Url + Login,{
-      body: JSON.stringify({
-        emailId:mail,
-        password:pass
-    }),
-    method:'POST',
-    headers:myHeaders
-    })
-    .then(res => res.json())
+    const res = await postApiRequest(login_url,
+      JSON.stringify({
+            emailId:mail,
+            password:pass
+        }),)
     .then(
       json => {
-      console.warn(json),
-      console.log("sucess")
+      var Data = JSON.stringify(json.data)
+      console.warn("Login:",Data)
+      // console.log("sucess")
+      setLoginResultDict(Data)
       setLoading(false)
+      if(!json.status){
+      if(json.message == 'User not found!'){
+        setBadMail(json.message)
+      }else{
+        setBadPass(json.message)
+      }
+     }else{
+      saveId()
+      // dispatch(setAuthData((json)))
+      // navigation.navigate("Dashboard")
+     }
       })
     .catch(err=>{
       console.log("fail")
@@ -113,10 +135,9 @@ const Login = ({navigation}) => {
 
         <LinearGradient colors={[Theme_Color,Theme_Color1]} style={style.btn}>
           <TouchableOpacity style={[style.btn,{justifyContent:'center',alignItems:"center",marginTop:0}]} 
-              //  onPress={()=>{if(validate()){
-              //    loginApiCall()
-              //  }}}>
-              onPress={()=>{loginApiCall()}}>
+               onPress={()=>{if(validate()){
+                loginApiCall()
+               }}}>
             <Text style={[style.btnTxt,{}]}>Login</Text>
           </TouchableOpacity>
           </LinearGradient>
