@@ -9,9 +9,17 @@ export const Images = {
     camera: require('../Images/camera.png'), 
     cross: require('../Images/cross.png'), 
     dot: require('../Images/dot.png'), 
-    cross: require('../Images/cross.png'), 
-    cross: require('../Images/cross.png'), 
-    cross: require('../Images/cross.png'), 
+    like: require('../Images/likeHeart.png'), 
+    comment: require('../Images/comment.png'), 
+    heartfill: require('../Images/heartfill.png'), 
+    edit: require('../Images/edit.png'), 
+    delete: require('../Images/delete.png'), 
+    heartfill: require('../Images/heartfill.png'), 
+    heartfill: require('../Images/heartfill.png'), 
+    heartfill: require('../Images/heartfill.png'), 
+    heartfill: require('../Images/heartfill.png'), 
+    heartfill: require('../Images/heartfill.png'), 
+
 
  
 };

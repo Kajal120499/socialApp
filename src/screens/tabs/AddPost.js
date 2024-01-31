@@ -1,10 +1,27 @@
-import { Image, StyleSheet,ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet,ScrollView, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native'
 import React, { useRef,useState } from 'react'
 import { Theme_Color1, black, white } from '../../utils/Color'
 import { Images } from '../../utils/Images'
 import {launchImageLibrary,launchCamera} from 'react-native-image-picker'
+import storage from '@react-native-firebase/storage';
+import { Base_Url, add_post } from '../../utils/String'
+import { useSelector } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import Loader from '../../components/Loader'
 
-const AddPost = () => {
+const AddPost = ({navigation}) => {
+    // const authData= useSelector(state=>state.auth)
+    // console.warn(authData.data)
+    const[loading,setLoading]=useState(false)
+
+    const retriveData=async()=>{
+    var userData = await AsyncStorage.getItem('LoginData')
+    console.warn(userData)
+      const myJsonData = JSON.parse(userData);
+    //   console.warn("userAdd",myJsonData)
+    //   setUrlstore(myJsonData);
+      imgUploadToFirestore()
+    }
     const [caption, setCaption] = useState('')
     const [imgData, setImgData] = useState({
         assets: [
@@ -30,6 +47,39 @@ const AddPost = () => {
         const result = await launchCamera({ mediaType: 'photo' });
         setImgData(result)
         console.log(result)
+    }
+
+    const imgUploadToFirestore=async()=>{
+        // setLoading(true)
+        let url=''
+        const myHeader=new Headers()
+        myHeader.append("Content-Type","application/json")
+        if(imgData!=null){
+            const reference = storage().ref(imgData.assets[0].fileName);
+            const pathToFile = imgData.assets[0].uri
+              await reference.putFile(pathToFile);
+            url = await storage().ref(imgData.assets[0].fileName).getDownloadURL();    
+        }
+        let body=JSON.stringify({
+            "userId":"65b13e60c40a0684ede7284a",
+            "caption":caption,
+            "username":"chirag",
+            "imageUrl":url
+        })
+        fetch(Base_Url+add_post,{
+            body,
+            method:'post',
+            headers:myHeader
+        }).then(res=>res.json())
+          .then(json=>{
+            // setLoading(false)
+            console.warn(json)
+            navigation.navigate("Dashboard")
+            // Alert.alert("Add data")
+        }).catch(err=>{
+            console.log(err)
+        })
+
     }
     
   return (
@@ -57,9 +107,10 @@ const AddPost = () => {
             <Text style={styles.pickerTxt}>Open Gallery</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity disabled={caption==''?true:false} style={[styles.postBtn,{backgroundColor:caption.length<10 ? '#9e9e9e':Theme_Color1}]}>
+        <TouchableOpacity disabled={caption==''?true:false} style={[styles.postBtn,{backgroundColor:caption.length<10 ? '#9e9e9e':Theme_Color1}]} onPress={()=>{imgUploadToFirestore()}}>
             <Text style={styles.posTxt}>Post</Text>
         </TouchableOpacity>
+        {/* <Loader visible={loading}/> */}
         </ScrollView>
 
     </View>

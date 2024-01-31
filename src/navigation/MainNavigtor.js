@@ -7,6 +7,7 @@ import Login from '../screens/Login/Login';
 import Signup from '../screens/Signup/Signup';
 import Dashboard from '../screens/Dashboard/Dashboard';
 import AddPost from '../screens/tabs/AddPost';
+import Comments from '../screens/tabs/Comments';
 
 const Stack = createNativeStackNavigator();
 const MainNavigtor = () => {
@@ -17,8 +18,8 @@ const MainNavigtor = () => {
             <Stack.Screen name="Login" component={Login}/>
             <Stack.Screen name="Signup" component={Signup}/>
             <Stack.Screen name="Dashboard" component={Dashboard}/>
-            <Stack.Screen name="AddPost" component={AddPost}/>
-
+            <Stack.Screen name="AddPost" component={AddPost} options={{headerShown:"true"}}/>
+            <Stack.Screen name="Comments" component={Comments} options={{headerShown:"true"}}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

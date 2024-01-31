@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Dashboard = ({navigation}) => {
     const[selectedTab,setselectedTab]=useState(0) 
-   
 
   return (
     <SafeAreaView style={styles.container}>

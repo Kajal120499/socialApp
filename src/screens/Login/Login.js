@@ -26,8 +26,10 @@ const Login = ({navigation}) => {
   const saveId = async () => {
     try {
         var loginData = JSON.stringify(loginResultDict)
-        console.warn("AsyncStorage Login Saved" + loginData)
-        await AsyncStorage.setItem('LoginData', loginData);
+        // console.warn("AsyncStorage Login Saved" + loginData)
+        var filterDta = await AsyncStorage.setItem('LoginData', loginData);
+        console.warn("Filter" + JSON.parse(loginData))
+
          navigation.navigate("Dashboard")
     } catch (e) {
         console.warn(e)
