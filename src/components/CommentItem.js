@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         marginTop:20,
         justifyContent:'center',
-
+        paddingBottom:20
     },
     commentsecondView:{
         justifyContent:'space-between',

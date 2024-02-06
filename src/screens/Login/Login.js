@@ -21,16 +21,15 @@ const Login = ({navigation}) => {
 
   const[loading,setLoading]=useState(false)
 
-  const [loginResultDict, setLoginResultDict] = useState({})
+  const [loginResultDict, setLoginResultDict] = useState([])
 
   const saveId = async () => {
     try {
         var loginData = JSON.stringify(loginResultDict)
         // console.warn("AsyncStorage Login Saved" + loginData)
         var filterDta = await AsyncStorage.setItem('LoginData', loginData);
-        console.warn("Filter" + JSON.parse(loginData))
-
-         navigation.navigate("Dashboard")
+        console.warn("Filter" + (loginData.data._id))
+        //  navigation.navigate("Dashboard")
     } catch (e) {
         console.warn(e)
     }

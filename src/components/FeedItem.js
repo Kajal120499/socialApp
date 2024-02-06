@@ -11,13 +11,13 @@ const FeedItem = ({ data,list,index ,onclick,onclickLike}) => {
     }
 
     const checkLike=()=>{
-        let islike=false
-        data.likes.map(item=>{
-            if(item=='65b13e60c40a0684ede7284a'){
-                islike=true
-            }
-        })
-        return islike
+        // let islike=false
+        // data.likes.map(item=>{
+        //     if(item=='65b13e60c40a0684ede7284a'){
+        //         islike=true
+        //     }
+        // })
+        // return islike
     }
     return (
         <View style={[styles.feed,{marginBottom:list.length-1==index?120:0}]}>
@@ -48,7 +48,7 @@ const FeedItem = ({ data,list,index ,onclick,onclickLike}) => {
               <TouchableOpacity onPress={()=>{onclickLike()}}>
                     <Image source={Images.like} style={[styles.icon,{tintColor:checkLike()?'red':'black'}]}/>
                 </TouchableOpacity>
-                <Text style={styles.like}>{data.likes.length+'Likes'}</Text>
+                {/* <Text style={styles.like}>{data.likes.length+'Likes'}</Text> */}
 
               </View>
               <View style={{flexDirection:"row"}}>
